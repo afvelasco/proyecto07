@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion de Usuarios</title>
+</head>
+<body>
+    <h3>Gestión de Usuarios</h3><br>
+    <table border>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Foto</th>                
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in usua %}
+                <tr>
+                    <td>
+                        {{u[0]}}
+                    </td>
+                    <td>
+                        {{u[1]}}
+                    </td>
+                    <td>
+                        {{u[3]}}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
