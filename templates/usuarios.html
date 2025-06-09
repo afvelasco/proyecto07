@@ -7,12 +7,14 @@
 </head>
 <body>
     <h3>Gestión de Usuarios</h3><br>
+    <a href="/agregausuario">Agregar un nuevo usuario</a><br>
     <table border>
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Nombre</th>
-                <th>Foto</th>                
+                <th>Foto</th>
+                <th>Operaciones</th>             
             </tr>
         </thead>
         <tbody>
@@ -25,7 +27,11 @@
                         {{u[1]}}
                     </td>
                     <td>
-                        {{u[3]}}
+                        <img src="/uploads/{{u[3]}}" width="100" alt="">
+                    </td>
+                    <td>
+                        <a href="/modificausuario/{{u[0]}}">Modificar</a>
+                        <a href="/eliminausuario/{{u[0]}}">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
