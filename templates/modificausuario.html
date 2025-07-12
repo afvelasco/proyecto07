@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modificar usuario</title>
+</head>
+<body>
+    <h3>Modificar usuario</h3><br>
+    <form action="/guardacambios" method="post" enctype="multipart/form-data">
+        <label for="id">Id Usuario: </label>
+        <input type="text" value="{{usu[0]}}" name="id" readonly><br>
+        <label for="nombre">Nombre: </label>
+        <input type="text" value="{{usu[1]}}" name="nombre" required><br>
+        <label for="contra">Contraseña (En Blanco para conservar) : </label>
+        <input type="text" name="contra"><br>
+        <label for="foto">Foto (En Blanco para conservar) : </label>
+        <input type="file" name="foto"><br><br>
+        <button>Guardar</button>
+    </form>
+</body>
+</html>

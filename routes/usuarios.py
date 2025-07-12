@@ -39,3 +39,25 @@ def guardausuario():
         return redirect("/usuarios")
     else:
         return render_template("agregausuario.html",msg = "Id ya registrado!!!")
+
+@app.route("/modificausuario/<id>")
+def modificausuario(id):
+    if session.get("logueado"):
+        usuario = mi_usuarios.consultar_a(id)[0]
+        return render_template("modificausuario.html",usu=usuario)    
+    else:
+        return redirect("/")
+    
+@app.route("/guardacambios",methods=['POST'])
+def guardacambios():
+    id = request.form['id']
+    nombre = request.form['nombre']
+    contra = request.form['contra']
+    foto = request.files['foto']
+    mi_usuarios.modificar([id,nombre,contra,foto])
+    return redirect("/usuarios")
+
+@app.route("/eliminausuario/<id>")
+def eliminausuario(id):
+    mi_usuarios.eliminar(id)
+    return redirect("/usuarios")

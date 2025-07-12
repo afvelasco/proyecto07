@@ -31,7 +31,7 @@
                     </td>
                     <td>
                         <a href="/modificausuario/{{u[0]}}">Modificar</a>
-                        <a href="/eliminausuario/{{u[0]}}">Eliminar</a>
+                        <a onclick="return confirm('Eliminar este usuario?')" href="/eliminausuario/{{u[0]}}">Eliminar</a>
                     </td>
                 </tr>
             {% endfor %}
