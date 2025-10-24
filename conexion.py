@@ -4,6 +4,10 @@ from random import randint
 from flask import Flask, redirect, render_template, request, send_from_directory, session
 import mysql.connector
 import hashlib
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
 
 app = Flask(__name__)
 app.secret_key = str(randint(100000,999999))

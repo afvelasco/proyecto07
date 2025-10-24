@@ -61,3 +61,8 @@ def guardacambios():
 def eliminausuario(id):
     mi_usuarios.eliminar(id)
     return redirect("/usuarios")
+
+@app.route("/enviamensaje/<id_usuario>")
+def enviamensaje(id_usuario):
+    mi_usuarios.mensaje(id_usuario)
+    return redirect("/usuarios")

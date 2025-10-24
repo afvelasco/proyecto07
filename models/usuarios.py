@@ -55,8 +55,29 @@ class Usuarios:
         sql = f"UPDATE usuarios SET inactivo=1 WHERE idusuario='{id}'"
         mi_cursor.execute(sql)
         miDB.commit()
-    
 
+    def mensaje(self, id):
+        #######################
+        sql = f"SELECT nombre,email FROM usuarios WHERE idusuario='{id}'"
+        mi_cursor.execute(sql)
+        resultado = mi_cursor.fetchall()[0]
+        #######################
+        remitente = 'adso07cab@outlook.com'
+        mensaje = MIMEMultipart()
+        mensaje['From'] = remitente
+        mensaje['To'] = resultado[1]
+        mensaje['Subject'] = "Prueba desde Python"
+        cuerpo = "Este es un mensaje de prueba enviado desde Nombre de Aplicación (Python)"
+        mensaje.attach(MIMEText(cuerpo, 'plain'))
+        #######################
+        nombre_usuario = 'adso07cab@outlook.com'
+        password = '4ds0o7-c4b'
+        server = smtplib.SMTP('smtp.office365.com:587')
+        server.starttls()
+        server.login(nombre_usuario, password)
+        server.sendmail(remitente, resultado[1], mensaje.as_string())
+        server.quit()
+        #######################
 
 mi_usuarios = Usuarios()
 
