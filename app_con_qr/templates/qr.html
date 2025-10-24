@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generador de Código QR con Flask</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        #qr-container { margin-top: 30px; }
+        img { border: 1px solid #ccc; padding: 10px; }
+        input[type="text"] { padding: 10px; width: 300px; margin-right: 10px; }
+        button { padding: 10px 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Generador de Código QR</h1>
+    
+    <div>
+        <input type="text" id="qr-text" placeholder="Escribe el texto o URL a codificar">
+        <button onclick="generarQR()">Generar QR</button>
+    </div>
+
+    <div id="qr-container">
+        </div>
+
+    <script>
+        async function generarQR() {
+            const inputText = document.getElementById('qr-text').value;
+            const container = document.getElementById('qr-container');
+            container.innerHTML = '<p>Generando...</p>';
+
+            if (!inputText) {
+                container.innerHTML = '<p style="color: red;">Por favor, ingresa algún texto.</p>';
+                return;
+            }
+
+            try {
+                // Petición POST a la API de Flask
+                const response = await fetch('/api/generate_qr', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    // Enviamos el texto en formato JSON
+                    body: JSON.stringify({ text: inputText })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // La respuesta contiene la cadena Base64
+                    const qrBase64 = data.qr_image;
+                    const dataUrl = data.data_url;
+
+                    // Crear el elemento de imagen
+                    const img = document.createElement('img');
+                    // Usamos la propiedad data_url para incrustar la imagen directamente en el HTML
+                    img.src = dataUrl; 
+                    img.alt = 'Código QR generado';
+                    
+                    container.innerHTML = '';
+                    container.appendChild(img);
+                    
+                } else {
+                    container.innerHTML = `<p style="color: red;">Error: ${data.error || 'No se pudo generar el QR.'}</p>`;
+                }
+            } catch (error) {
+                container.innerHTML = `<p style="color: red;">Error de conexión: ${error.message}</p>`;
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>
