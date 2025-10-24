@@ -11,6 +11,7 @@ miDB = mysql.connector.connect(host="localhost",
                                database="proyecto07")
 mi_cursor = miDB.cursor()
 
+# Endpoint para consultar todos los usuarios activos
 @programa.route("/usuarios", methods=['GET'])
 def get_usuarios():
     sql = f"SELECT * FROM usuarios WHERE inactivo=0"
@@ -21,6 +22,7 @@ def get_usuarios():
         datos.append({"id":usuario[0],"nombre":usuario[1],"foto":usuario[3]})
     return jsonify({"usuarios":datos})
 
+# Endpoint para consultar un usuario por id
 @programa.route("/usuarios/<id>", methods=['GET'])
 def get_usuario(id):
     sql = f"SELECT * FROM usuarios WHERE idusuario='{id}' AND inactivo=0"
@@ -31,6 +33,7 @@ def get_usuario(id):
     else:
         return jsonify({"mensaje":"Id no encontrado"})
 
+# Endpoint para agregar un usuario por método POST
 @programa.route("/usuario", methods=['POST'])
 def agrega_usuario():
     nuevo_usuario = request.get_json()

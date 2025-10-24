@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Frontend de Microservicios</title>
+</head>
+<body>
+    <h1>Catálogo de Productos y Usuarios</h1>
+    
+    <h2>Productos</h2>
+    <div id="productos-list">Cargando productos...</div>
+
+    <h2>Usuarios</h2>
+    <div id="usuarios-list">Cargando usuarios...</div>
+
+    <h2>Consulta producto por nombre</h2>
+    <div>
+        <label for="nom">Nombre: </label>
+        <input type="text" id="nom">
+        <button onclick="consultaProducto()">Consultar</button>
+    </div>
+    <div id="usuario-consulta"> </div>
+
+    <h2>Agrega producto</h2>
+    <div>
+        <button onclick="agregaProducto()">Agregar</button>
+    </div>
+    <div id="usuario-agrega"> </div>
+
+    <script>
+        // URLs de los microservicios
+        const PRODUCTOS_URL = 'http://10.6.124.202:5001/productos';
+        const USUARIOS_URL = 'http://10.6.124.202:5002/usuarios';
+
+        // --- FUNCIONES DE CONSUMO (CRUD: READ) ---
+
+        async function consultaProducto() {
+            const nombre = document.getElementById("nom").value
+            const porductoDiv = document.getElementById('usuario-consulta');
+            try {
+                // Petición GET al microservicio de productos
+                const response = await fetch(PRODUCTOS_URL+"/"+nombre, { method: 'GET' });
+                const producto = await response.json();
+                porductoDiv.textContent = `ID: ${producto.id} - PRECIO $${producto.precio}`;
+            } catch (error) {
+                listaDiv.textContent = `Error al cargar producto: ${error.message}. Asegúrate que el Microservicio de Productos (5001) está corriendo.`;
+                console.error('Error al cargar producto:', error);
+            }
+
+        }
+        async function agregaProducto() {
+            const nuevo_producto = {"nombre":"kb","precio":40,"usuario":"afv"}
+            const response = await fetch(PRODUCTOS_URL, 
+                            { method: 'POST',
+                            headers: {'Content-Type':
+                                        'application/json'
+                                        },
+                            body: JSON.stringify(nuevo_producto)
+                            });
+            
+        }
+
+        async function cargarProductos() {
+            const listaDiv = document.getElementById('productos-list');
+            listaDiv.innerHTML = ''; // Limpiar lista
+            try {
+                // Petición GET al microservicio de productos
+                const response = await fetch(PRODUCTOS_URL, { method: 'GET' });
+                const productos = await response.json();
+
+                if (productos.length === 0) {
+                    listaDiv.textContent = "No hay productos disponibles.";
+                    return;
+                }
+
+                const ul = document.createElement('ul');
+                productos.forEach(p => {
+                    const li = document.createElement('li');
+                    li.textContent = `[ID: ${p.id}] ${p.nombre} - $${p.precio}`;
+                    ul.appendChild(li);
+                });
+                listaDiv.appendChild(ul);
+            } catch (error) {
+                listaDiv.textContent = `Error al cargar productos: ${error.message}. Asegúrate que el Microservicio de Productos (5001) está corriendo.`;
+                console.error('Error al cargar productos:', error);
+            }
+        }
+
+        async function cargarUsuarios() {
+            const listaDiv = document.getElementById('usuarios-list');
+            listaDiv.innerHTML = '';
+            try {
+                // Petición GET al microservicio de usuarios
+                const response = await fetch(USUARIOS_URL, { method: 'GET' });
+                const usuarios = await response.json();
+
+                if (usuarios.length === 0) {
+                    listaDiv.textContent = "No hay usuarios disponibles.";
+                    return;
+                }
+
+                const ul = document.createElement('ul');
+                usuarios.forEach(u => {
+                    const li = document.createElement('li');
+                    li.textContent = `${u.nombre} (${u.rol})`;
+                    ul.appendChild(li);
+                });
+                listaDiv.appendChild(ul);
+            } catch (error) {
+                listaDiv.textContent = `Error al cargar usuarios: ${error.message}. Asegúrate que el Microservicio de Usuarios (5002) está corriendo.`;
+                console.error('Error al cargar usuarios:', error);
+            }
+        }
+
+        // --- EJECUCIÓN AL CARGAR LA PÁGINA ---
+        window.onload = () => {
+            cargarProductos();
+            cargarUsuarios();
+        };
+
+        // NOTA: Para implementar C/U/D (Create, Update, Delete), se usarían métodos 
+        // POST, PUT y DELETE en la función fetch(), respectivamente,
+        // incluyendo el cuerpo de la petición con `body: JSON.stringify(data)`.
+    </script>
+</body>
+</html>
